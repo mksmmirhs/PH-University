@@ -7,64 +7,81 @@ import {
   TUserName,
 } from './student.interface';
 
-import bcrypt from 'bcrypt';
-import config from '../../config';
+const nameSchema = new Schema<TUserName>(
+  {
+    firstName: { type: String, required: true },
+    middleName: { type: String, required: true },
+    lastName: { type: String, required: true },
+  },
+  {
+    _id: false,
+  }
+);
 
-const nameSchema = new Schema<TUserName>({
-  firstName: { type: String, required: true },
-  middleName: { type: String, required: true },
-  lastName: { type: String, required: true },
-});
+const guardianSchema = new Schema<TGuardian>(
+  {
+    fatherName: {
+      type: String,
+      required: true,
+    },
+    fatherOccupation: {
+      type: String,
+      required: true,
+    },
+    fatherContactNo: {
+      type: String,
+      required: true,
+    },
+    motherName: {
+      type: String,
+      required: true,
+    },
+    motherOccupation: {
+      type: String,
+      required: true,
+    },
+    motherContactNo: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    _id: false,
+  }
+);
 
-const guardianSchema = new Schema<TGuardian>({
-  fatherName: {
-    type: String,
-    required: true,
+const localGuardianSchema = new Schema<TLocalGuardian>(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    occupation: {
+      type: String,
+      required: true,
+    },
+    contactNo: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
   },
-  fatherOccupation: {
-    type: String,
-    required: true,
-  },
-  fatherContactNo: {
-    type: String,
-    required: true,
-  },
-  motherName: {
-    type: String,
-    required: true,
-  },
-  motherOccupation: {
-    type: String,
-    required: true,
-  },
-  motherContactNo: {
-    type: String,
-    required: true,
-  },
-});
-
-const localGuardianSchema = new Schema<TLocalGuardian>({
-  name: {
-    type: String,
-    required: true,
-  },
-  occupation: {
-    type: String,
-    required: true,
-  },
-  contactNo: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    _id: false,
+  }
+);
 
 const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, required: [true, ' id is missing'], unique: true },
-  password: { type: String, required: [true, ' password is missing'] },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: [true, ' User id is required'],
+    unique: true,
+    ref: 'User',
+  },
   name: nameSchema,
   gender: {
     type: String,
@@ -84,11 +101,7 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   guardian: guardianSchema,
   localGuardian: localGuardianSchema,
   profileImg: { type: String },
-  isActive: {
-    type: String,
-    enum: ['active', 'blocked'],
-    default: 'active',
-  },
+
   isDeleted: {
     type: Boolean,
     default: false,
@@ -103,17 +116,6 @@ studentSchema.statics.isUserExists = async function (id: string) {
 };
 
 /// middlewares
-studentSchema.pre('save', async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this;
-  user.password = await bcrypt.hash(user.password, Number(config.salt_rounds));
-  next();
-});
-
-studentSchema.post('save', function (doc, next) {
-  doc.password = '';
-  next();
-});
 
 studentSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
