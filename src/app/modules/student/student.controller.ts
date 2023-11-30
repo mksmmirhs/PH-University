@@ -1,7 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { StudentService } from './student.service';
 
-const getAllStudent = async (req: Request, res: Response) => {
+const getAllStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await StudentService.getAllStudents();
     res.status(200).json({
@@ -9,16 +13,16 @@ const getAllStudent = async (req: Request, res: Response) => {
       message: 'All student retrieve success',
       data: result,
     });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'something went wrong',
-      error: err,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
-const findStudentById = async (req: Request, res: Response) => {
+const findStudentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { studentId } = req.params;
     const result = await StudentService.findStudentById(studentId);
@@ -27,15 +31,15 @@ const findStudentById = async (req: Request, res: Response) => {
       message: 'Student retrieve success',
       data: result,
     });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'something went wrong',
-      error: err,
-    });
+  } catch (err) {
+    next(err);
   }
 };
-const deleteStudentById = async (req: Request, res: Response) => {
+const deleteStudentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { studentId } = req.params;
     const result = await StudentService.deleteStudentById(studentId);
@@ -44,12 +48,8 @@ const deleteStudentById = async (req: Request, res: Response) => {
       message: 'Student deleted success',
       data: result,
     });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'something went wrong',
-      error: err,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
