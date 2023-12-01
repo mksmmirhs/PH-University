@@ -13,7 +13,7 @@ app.use(cors());
 app.use('/api/v1', router);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('PH University is running !');
+  res.send('PH University API is running !');
 });
 
 app.use(globalErrorHandler);
