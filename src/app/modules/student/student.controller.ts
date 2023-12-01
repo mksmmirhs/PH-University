@@ -1,13 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { StudentService } from './student.service';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 
-const getAllStudent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getAllStudent: RequestHandler = async (req, res, next) => {
   try {
     const result = await StudentService.getAllStudents();
 
@@ -22,11 +18,7 @@ const getAllStudent = async (
   }
 };
 
-const findStudentById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const findStudentById: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
     const result = await StudentService.findStudentById(studentId);
@@ -41,11 +33,7 @@ const findStudentById = async (
     next(err);
   }
 };
-const deleteStudentById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteStudentById: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
     const result = await StudentService.deleteStudentById(studentId);
