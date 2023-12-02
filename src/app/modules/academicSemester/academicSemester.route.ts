@@ -20,6 +20,6 @@ router.get('/', AcademicSemesterController.getAllAcademicSemester);
 router.get('/:id', AcademicSemesterController.getASemesterById);
 
 // upade a semester
-router.get('/:id', AcademicSemesterController.getASemesterById);
+router.patch('/:id', AcademicSemesterController.getASemesterById);
 
 export const AcademicSemesterRoutes = router;
