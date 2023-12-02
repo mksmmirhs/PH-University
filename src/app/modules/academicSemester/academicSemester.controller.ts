@@ -19,6 +19,31 @@ const createAcademicSemester = catchAsync(
   }
 );
 
+const getAllAcademicSemester = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await AcademicSemesterService.getAllAcademicSemester();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'All semester fatched',
+      data: result,
+    });
+  }
+);
+
+const getASemesterById = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await AcademicSemesterService.getASemesterByIdasync(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Semester fatched',
+    data: result,
+  });
+});
+
 export const AcademicSemesterController = {
   createAcademicSemester,
+  getAllAcademicSemester,
+  getASemesterById,
 };
