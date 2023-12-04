@@ -74,43 +74,46 @@ const localGuardianSchema = new Schema<TLocalGuardian>(
   }
 );
 
-const studentSchema = new Schema<TStudent, StudentModel>({
-  id: { type: String, required: [true, ' id is missing'], unique: true },
-  user: {
-    type: Schema.Types.ObjectId,
-    required: [true, ' User id is required'],
-    unique: true,
-    ref: 'User',
-  },
-  name: nameSchema,
-  gender: {
-    type: String,
-    enum: ['male', 'female'],
-    required: true,
-  },
-  dateOfBirth: { type: String },
-  email: { type: String, required: true, unique: true },
-  contactNo: { type: String, required: true },
-  emergencyContactNo: { type: String, required: true },
-  bloodGroup: {
-    type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-  },
-  presentAddress: { type: String, required: true },
-  permanentAddress: { type: String, required: true },
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
-  profileImg: { type: String },
-  admissionSemester: {
-    type: Schema.Types.ObjectId,
-    ref: 'AcademicSemester',
-  },
+const studentSchema = new Schema<TStudent, StudentModel>(
+  {
+    id: { type: String, required: [true, ' id is missing'], unique: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, ' User id is required'],
+      unique: true,
+      ref: 'User',
+    },
+    name: nameSchema,
+    gender: {
+      type: String,
+      enum: ['male', 'female'],
+      required: true,
+    },
+    dateOfBirth: { type: String },
+    email: { type: String, required: true, unique: true },
+    contactNo: { type: String, required: true },
+    emergencyContactNo: { type: String, required: true },
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    },
+    presentAddress: { type: String, required: true },
+    permanentAddress: { type: String, required: true },
+    guardian: guardianSchema,
+    localGuardian: localGuardianSchema,
+    profileImg: { type: String },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicSemester',
+    },
 
-  isDeleted: {
-    type: Boolean,
-    default: false,
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-});
+  { timestamps: true }
+);
 
 //for static method
 
