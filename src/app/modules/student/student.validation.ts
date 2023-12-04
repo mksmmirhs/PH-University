@@ -60,6 +60,7 @@ const createStudentValidationSchama = z.object({
       guardian: guardianValidationSchama,
       localGuardian: localGuardianValidationSechama,
       profileImg: z.string(),
+      admissionSemester: z.string(),
     }),
   }),
 });
