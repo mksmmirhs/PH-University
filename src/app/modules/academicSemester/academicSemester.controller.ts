@@ -33,11 +33,11 @@ const getAllAcademicSemester = catchAsync(
 
 const getASemesterById = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const result = await AcademicSemesterService.getASemesterByIdasync(id);
+  const result = await AcademicSemesterService.getASemesterById(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Semester fatched',
+    message: 'Semester fetched',
     data: result,
   });
 });

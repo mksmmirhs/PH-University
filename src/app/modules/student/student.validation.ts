@@ -36,7 +36,7 @@ const localGuardianValidationSechama = z.object({
     .min(1, { message: 'Local guardian address must not be empty' }),
 });
 
-const createStudentValidationSchama = z.object({
+const createStudentValidationSchema = z.object({
   body: z.object({
     password: z.string(),
     student: z.object({
@@ -61,9 +61,10 @@ const createStudentValidationSchama = z.object({
       localGuardian: localGuardianValidationSechama,
       profileImg: z.string(),
       admissionSemester: z.string(),
+      academicDepartment: z.string(),
     }),
   }),
 });
 export const studentValidation = {
-  createStudentValidationSchama,
+  createStudentValidationSchema,
 };
