@@ -2,9 +2,6 @@ import { TAcademicFaculty } from './academicFaculty.interface';
 import { AcademicFaculty } from './academicFaculty.model';
 
 const createAcademicFacultyIntoDB = async (payload: TAcademicFaculty) => {
-  if (await AcademicFaculty.findOne({ name: payload.name })) {
-    throw new Error('Academic Faculty already exist');
-  }
   const result = await AcademicFaculty.create(payload);
   return result;
 };
