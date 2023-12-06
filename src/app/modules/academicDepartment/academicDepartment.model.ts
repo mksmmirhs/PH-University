@@ -7,12 +7,12 @@ const academicDepartmentSchema = new Schema<TAcademicDepartment>(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, 'Academic department name is required'],
       unique: true,
     },
     academicFaculty: {
       type: Schema.ObjectId,
-      required: true,
+      required: [true, 'Academic Faculty is required'],
       ref: 'AcademicFaculty',
     },
   },
