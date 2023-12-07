@@ -10,7 +10,7 @@ import {
 const nameSchema = new Schema<TUserName>(
   {
     firstName: { type: String, required: true },
-    middleName: { type: String, required: true },
+    middleName: { type: String },
     lastName: { type: String, required: true },
   },
   {

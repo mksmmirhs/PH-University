@@ -2,7 +2,9 @@ import { z } from 'zod';
 
 const userNameValidationSchema = z.object({
   firstName: z.string().min(1, { message: 'First name must not be empty' }),
-  middleName: z.string().min(1, { message: 'Middle name must not be empty' }),
+  middleName: z
+    .string({ invalid_type_error: 'Middle name must not be empty' })
+    .optional(),
   lastName: z.string().min(1, { message: 'Last name must not be empty' }),
 });
 
