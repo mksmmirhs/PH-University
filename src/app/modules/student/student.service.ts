@@ -31,7 +31,7 @@ const getAllStudents = async (query: Record<string, unknown>) => {
 };
 
 const findStudentById = async (id: string) => {
-  const result = await Student.findOne({ id })
+  const result = await Student.findById(id)
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -63,7 +63,7 @@ const updateStudentIntoDb = async (id: string, payload: Partial<TStudent>) => {
       modifiedUpdateData[`localGuardian.${key}`] = value;
     }
   }
-  const result = await Student.findOneAndUpdate({ id }, modifiedUpdateData, {
+  const result = await Student.findByIdAndUpdate(id, modifiedUpdateData, {
     new: true,
     runValidators: true,
   });
@@ -80,8 +80,8 @@ const deleteStudentById = async (id: string) => {
   try {
     session.startTransaction();
 
-    const deletedStudent = await Student.findOneAndUpdate(
-      { id },
+    const deletedStudent = await Student.findByIdAndUpdate(
+      id,
       { isDeleted: true },
       { new: true, session }
     );
@@ -92,9 +92,10 @@ const deleteStudentById = async (id: string) => {
         'Could not delete the student'
       );
     }
+    const studentUser = deletedStudent.user;
 
-    const deletedUser = await User.findOneAndUpdate(
-      { id },
+    const deletedUser = await User.findByIdAndUpdate(
+      studentUser,
       { isDeleted: true },
       { new: true, session }
     );

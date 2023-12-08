@@ -121,7 +121,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 //for static method
 
 studentSchema.statics.isUserExists = async function (id: string) {
-  const result = await Student.findOne({ id });
+  const result = await Student.findById(id);
   return result;
 };
 
