@@ -28,6 +28,7 @@ const getAllAdmins = catchAsync(async (req, res) => {
 
 const updateAdmin = catchAsync(async (req, res) => {
   const { id } = req.params;
+
   const { admin } = req.body;
   const result = await AdminServices.updateAdminIntoDB(id, admin);
 
