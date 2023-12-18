@@ -37,9 +37,9 @@ const createSemesterRegistrationIntoDB = async (
     throw new AppError(httpStatus.NOT_FOUND, 'The semester do not exist');
   }
   // is the semester is already registered
-  const isTheSemesterAlreadyRegistered = await SemesterRegistration.findById(
-    academicSemester
-  );
+  const isTheSemesterAlreadyRegistered = await SemesterRegistration.findOne({
+    academicSemester,
+  });
   if (isTheSemesterAlreadyRegistered) {
     throw new AppError(httpStatus.CONFLICT, 'The semester already registered');
   }
@@ -85,7 +85,53 @@ const updateSemesterRegistrationIntoDB = async (
    *
    */
   // check if the requested registered semester is exists
+
+  // const academicSemester = payload?.academicSemester;
+  // const isTheSemesterExist = await AcademicSemester.findById(academicSemester);
+  // if (!isTheSemesterExist) {
+  //   throw new AppError(httpStatus.NOT_FOUND, 'Academic semester not found');
+  // }
   // check if the semester is already registered!
+  const isSemesterAlreadyRegistered = await SemesterRegistration.findById(id);
+  if (!isSemesterAlreadyRegistered) {
+    throw new AppError(httpStatus.CONFLICT, 'The semester is not registered');
+  }
+  //If the requested semester registration is ended, we will not update anything
+  const currentSemesterStatus = isSemesterAlreadyRegistered.status;
+  if (currentSemesterStatus === RegistrationStatus.ENDED) {
+    throw new AppError(
+      httpStatus.NOT_ACCEPTABLE,
+      'The semester is ended you can not update'
+    );
+  }
+  // check if the semester registration changes from upcoming to end
+
+  const requestedSemesterStatus = payload.status;
+  if (
+    requestedSemesterStatus === RegistrationStatus.ENDED &&
+    currentSemesterStatus === RegistrationStatus.UPCOMING
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `You can not change semester status from ${currentSemesterStatus} to ${requestedSemesterStatus} `
+    );
+  }
+  // can not change from ongoing to upcoming
+  if (
+    requestedSemesterStatus === RegistrationStatus.UPCOMING &&
+    currentSemesterStatus === RegistrationStatus.ONGOING
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `You can not change semester status from ${currentSemesterStatus} to ${requestedSemesterStatus} `
+    );
+  }
+
+  const result = await SemesterRegistration.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+  return result;
 };
 
 const deleteSemesterRegistrationFromDB = async (id: string) => {
