@@ -7,6 +7,8 @@ import { TSemesterRegistration } from './semesterRegistration.interface';
 import { SemesterRegistration } from './semesterRegistration.model';
 import { AcademicSemester } from '../academicSemester/academicSemester.model';
 import QueryBuilder from '../../builder/QueryBuilder';
+import mongoose from 'mongoose';
+import { OfferedCourse } from '../OfferedCourse/OfferedCourse.model';
 
 const createSemesterRegistrationIntoDB = async (
   payload: TSemesterRegistration
@@ -140,6 +142,52 @@ const deleteSemesterRegistrationFromDB = async (id: string) => {
   * Step2: Delete semester registration when the status is 
   'UPCOMING'.
   **/
+  const isSemesterRegistrationExist = await SemesterRegistration.findById(id);
+
+  if (!isSemesterRegistrationExist) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `The semester registration do not exist`
+    );
+  }
+  // can not delete the ongoing or ended semester registration
+  if (isSemesterRegistrationExist?.status !== RegistrationStatus.UPCOMING) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `You can not delete the ${isSemesterRegistrationExist?.status} semester registration`
+    );
+  }
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const deleteSemesterRegistration =
+      await SemesterRegistration.findByIdAndDelete(id, { session });
+    if (!deleteSemesterRegistration) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        `Semester registration delete failed`
+      );
+    }
+
+    const deleteAllOfferedCourse = await OfferedCourse.deleteMany(
+      {
+        semesterRegistration: id,
+      },
+      { session }
+    );
+    if (!deleteAllOfferedCourse) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        `Offered course delete failed`
+      );
+    }
+    await session.commitTransaction();
+    await session.endSession();
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(error);
+  }
 };
 
 export const SemesterRegistrationService = {
