@@ -1,11 +1,5 @@
 import { Schema, model } from 'mongoose';
-import {
-  StudentModel,
-  TGuardian,
-  TLocalGuardian,
-  TStudent,
-  TUserName,
-} from './student.interface';
+import { StudentModel, TGuardian, TLocalGuardian, TStudent, TUserName } from './student.interface';
 
 const nameSchema = new Schema<TUserName>(
   {
@@ -15,7 +9,7 @@ const nameSchema = new Schema<TUserName>(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const guardianSchema = new Schema<TGuardian>(
@@ -47,7 +41,7 @@ const guardianSchema = new Schema<TGuardian>(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const localGuardianSchema = new Schema<TLocalGuardian>(
@@ -71,7 +65,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const studentSchema = new Schema<TStudent, StudentModel>(
@@ -115,7 +109,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       ref: 'AcademicDepartment',
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 //for static method

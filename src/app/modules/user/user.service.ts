@@ -6,11 +6,7 @@ import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { TUser } from './user.interface';
 import { User } from './user.model';
-import {
-  generateAdminId,
-  generateFacultyId,
-  generateStudentId,
-} from './user.utils';
+import { generateAdminId, generateFacultyId, generateStudentId } from './user.utils';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { TAdmin } from '../Admin/admin.interface';
@@ -27,11 +23,20 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   // generate student id
   const semesterID = payload.admissionSemester;
   const admissionSemester = await AcademicSemester.findById(semesterID);
-  userData.id = await generateStudentId(
-    admissionSemester as TAcademicSemester,
-    semesterID
-  );
+
+  if (!admissionSemester) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'This academic semester do not exist');
+  }
+
+  const academicDepartment = await AcademicDepartment.findById(payload.academicDepartment);
+
+  if (!academicDepartment) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'This academic department do not exist');
+  }
+
+  userData.id = await generateStudentId(admissionSemester as TAcademicSemester, semesterID);
   const session = await mongoose.startSession();
+
   try {
     session.startTransaction();
 
@@ -63,16 +68,14 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
   // create a user object
   const userData: Partial<TUser> = {};
 
-  //if password is not given , use deafult password
+  //if password is not given , use default password
   userData.password = password || (config.default_password as string);
 
   //set student role
   userData.role = 'faculty';
 
   // find academic department info
-  const academicDepartment = await AcademicDepartment.findById(
-    payload.academicDepartment
-  );
+  const academicDepartment = await AcademicDepartment.findById(payload.academicDepartment);
 
   if (!academicDepartment) {
     throw new AppError(400, 'Academic department not found');
@@ -119,7 +122,7 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
   // create a user object
   const userData: Partial<TUser> = {};
 
-  //if password is not given , use deafult password
+  //if password is not given , use default password
   userData.password = password || (config.default_password as string);
 
   //set student role

@@ -2,13 +2,13 @@ import { z } from 'zod';
 import { Days } from './OfferedCourse.constant';
 
 const timeStringSchema = z.string().refine(
-  (time) => {
+  time => {
     const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/; // 00-09 10-19 20-23
     return regex.test(time);
   },
   {
     message: 'Invalid time format , expected "HH:MM" in 24 hours format',
-  }
+  },
 );
 
 const createOfferedCourseValidationSchema = z.object({
@@ -26,7 +26,7 @@ const createOfferedCourseValidationSchema = z.object({
       endTime: timeStringSchema,
     })
     .refine(
-      (body) => {
+      body => {
         // startTime : 10:30  => 1970-01-01T10:30
         //endTime : 12:30  =>  1970-01-01T12:30
 
@@ -37,7 +37,7 @@ const createOfferedCourseValidationSchema = z.object({
       },
       {
         message: 'Start time should be before End time !  ',
-      }
+      },
     ),
 });
 
@@ -51,7 +51,7 @@ const updateOfferedCourseValidationSchema = z.object({
       endTime: timeStringSchema,
     })
     .refine(
-      (body) => {
+      body => {
         // startTime : 10:30  => 1970-01-01T10:30
         //endTime : 12:30  =>  1970-01-01T12:30
 
@@ -62,7 +62,7 @@ const updateOfferedCourseValidationSchema = z.object({
       },
       {
         message: 'Start time should be before End time !  ',
-      }
+      },
     ),
 });
 

@@ -31,9 +31,9 @@ const semesterRegistrationSchema = new Schema<TSemesterRegistration>(
       default: 15,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 export const SemesterRegistration = model<TSemesterRegistration>(
   'SemesterRegistration',
-  semesterRegistrationSchema
+  semesterRegistrationSchema,
 );

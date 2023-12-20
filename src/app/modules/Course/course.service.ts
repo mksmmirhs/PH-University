@@ -15,7 +15,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(
     Course.find(),
     // .populate('preRequisiteCourses.course'),
-    query
+    query,
   )
     .search(CourseSearchableFields)
     .filter()
@@ -28,9 +28,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleCourseFromDB = async (id: string) => {
-  const result = await Course.findById(id).populate(
-    'preRequisiteCourses.course'
-  );
+  const result = await Course.findById(id).populate('preRequisiteCourses.course');
   return result;
 };
 
@@ -43,15 +41,11 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     session.startTransaction();
 
     //step1: basic course info update
-    const updatedBasicCourseInfo = await Course.findByIdAndUpdate(
-      id,
-      courseRemainingData,
-      {
-        new: true,
-        runValidators: true,
-        session,
-      }
-    );
+    const updatedBasicCourseInfo = await Course.findByIdAndUpdate(id, courseRemainingData, {
+      new: true,
+      runValidators: true,
+      session,
+    });
 
     if (!updatedBasicCourseInfo) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update course');
@@ -61,8 +55,8 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     if (preRequisiteCourses && preRequisiteCourses.length > 0) {
       // filter out the deleted fields
       const deletedPreRequisites = preRequisiteCourses
-        .filter((el) => el.course && el.isDeleted)
-        .map((el) => el.course);
+        .filter(el => el.course && el.isDeleted)
+        .map(el => el.course);
 
       const deletedPreRequisiteCourses = await Course.findByIdAndUpdate(
         id,
@@ -75,7 +69,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
           new: true,
           runValidators: true,
           session,
-        }
+        },
       );
 
       if (!deletedPreRequisiteCourses) {
@@ -83,9 +77,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
       }
 
       // filter out the new course fields
-      const newPreRequisites = preRequisiteCourses?.filter(
-        (el) => el.course && !el.isDeleted
-      );
+      const newPreRequisites = preRequisiteCourses?.filter(el => el.course && !el.isDeleted);
 
       const newPreRequisiteCourses = await Course.findByIdAndUpdate(
         id,
@@ -96,7 +88,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
           new: true,
           runValidators: true,
           session,
-        }
+        },
       );
 
       if (!newPreRequisiteCourses) {
@@ -107,9 +99,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     await session.commitTransaction();
     await session.endSession();
 
-    const result = await Course.findById(id).populate(
-      'preRequisiteCourses.course'
-    );
+    const result = await Course.findById(id).populate('preRequisiteCourses.course');
 
     return result;
   } catch (err) {
@@ -125,15 +115,12 @@ const deleteCourseFromDB = async (id: string) => {
     { isDeleted: true },
     {
       new: true,
-    }
+    },
   );
   return result;
 };
 
-const assignFacultiesWithCourseIntoDB = async (
-  id: string,
-  payload: Partial<TCourseFaculty>
-) => {
+const assignFacultiesWithCourseIntoDB = async (id: string, payload: Partial<TCourseFaculty>) => {
   const result = await CourseFaculty.findByIdAndUpdate(
     id,
     {
@@ -143,15 +130,12 @@ const assignFacultiesWithCourseIntoDB = async (
     {
       upsert: true,
       new: true,
-    }
+    },
   );
   return result;
 };
 
-const removeFacultiesFromCourseFromDB = async (
-  id: string,
-  payload: Partial<TCourseFaculty>
-) => {
+const removeFacultiesFromCourseFromDB = async (id: string, payload: Partial<TCourseFaculty>) => {
   const result = await CourseFaculty.findByIdAndUpdate(
     id,
     {
@@ -159,7 +143,7 @@ const removeFacultiesFromCourseFromDB = async (
     },
     {
       new: true,
-    }
+    },
   );
   return result;
 };

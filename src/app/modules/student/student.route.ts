@@ -9,7 +9,7 @@ router.get('/:id', StudentController.findStudentById);
 router.patch(
   '/:id',
   validateRequest(studentValidation.updateStudentValidationSchema),
-  StudentController.updateStudentIntoDb
+  StudentController.updateStudentIntoDb,
 );
 router.delete('/:id', StudentController.deleteStudentById);
 

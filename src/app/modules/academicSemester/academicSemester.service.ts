@@ -23,10 +23,7 @@ const getASemesterById = async (id: string) => {
   return result;
 };
 
-const updateAcademicSemester = async (
-  id: string,
-  payload: TAcademicSemester
-) => {
+const updateAcademicSemester = async (id: string, payload: TAcademicSemester) => {
   if (
     payload.name &&
     payload.code &&

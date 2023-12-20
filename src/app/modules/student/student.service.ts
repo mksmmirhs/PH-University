@@ -17,7 +17,7 @@ const getAllStudents = async (query: Record<string, unknown>) => {
           path: 'academicFaculty',
         },
       }),
-    query
+    query,
   )
     .search(studentSearchableFields)
     .fields()
@@ -83,21 +83,18 @@ const deleteStudentById = async (id: string) => {
     const deletedStudent = await Student.findByIdAndUpdate(
       id,
       { isDeleted: true },
-      { new: true, session }
+      { new: true, session },
     );
 
     if (!deletedStudent) {
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        'Could not delete the student'
-      );
+      throw new AppError(httpStatus.BAD_REQUEST, 'Could not delete the student');
     }
     const studentUser = deletedStudent.user;
 
     const deletedUser = await User.findByIdAndUpdate(
       studentUser,
       { isDeleted: true },
-      { new: true, session }
+      { new: true, session },
     );
 
     if (!deletedUser) {

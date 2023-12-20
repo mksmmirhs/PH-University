@@ -7,7 +7,7 @@ const notFound = (
   req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const code = httpStatus.NOT_FOUND;
   return res.status(code).json({

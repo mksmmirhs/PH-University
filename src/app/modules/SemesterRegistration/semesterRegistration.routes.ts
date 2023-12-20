@@ -9,34 +9,21 @@ const router = express.Router();
 
 router.post(
   '/create-semester-registration',
-  validateRequest(
-    semesterRegistrationValidation.createSemesterRegistrationValidationSchema
-  ),
-  SemesterRegistrationController.createSemesterRegistration
+  validateRequest(semesterRegistrationValidation.createSemesterRegistrationValidationSchema),
+  SemesterRegistrationController.createSemesterRegistration,
 );
 
-router.get(
-  '/:id',
-  SemesterRegistrationController.getSingleSemesterRegistration
-);
+router.get('/:id', SemesterRegistrationController.getSingleSemesterRegistration);
 
 router.patch(
   '/:id',
-  validateRequest(
-    semesterRegistrationValidation.updateSemesterRegistrationValidationSchema
-  ),
-  SemesterRegistrationController.updateSemesterRegistration
+  validateRequest(semesterRegistrationValidation.updateSemesterRegistrationValidationSchema),
+  SemesterRegistrationController.updateSemesterRegistration,
 );
 
-router.get(
-  '/:id',
-  SemesterRegistrationController.getSingleSemesterRegistration
-);
+router.get('/:id', SemesterRegistrationController.getSingleSemesterRegistration);
 
-router.delete(
-  '/:id',
-  SemesterRegistrationController.deleteSemesterRegistration
-);
+router.delete('/:id', SemesterRegistrationController.deleteSemesterRegistration);
 
 router.get('/', SemesterRegistrationController.getAllSemesterRegistrations);
 

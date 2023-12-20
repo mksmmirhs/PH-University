@@ -1,10 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { TAcademicSemester } from './academicSemester.interface';
-import {
-  Month,
-  AcademicSemesterCode,
-  AcademicSemesterName,
-} from './academicSemester.constant';
+import { Month, AcademicSemesterCode, AcademicSemesterName } from './academicSemester.constant';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 
@@ -37,7 +33,7 @@ const academicSemesterSchema = new Schema<TAcademicSemester>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 academicSemesterSchema.pre('save', async function (next) {
@@ -53,5 +49,5 @@ academicSemesterSchema.pre('save', async function (next) {
 
 export const AcademicSemester = model<TAcademicSemester>(
   'AcademicSemester',
-  academicSemesterSchema
+  academicSemesterSchema,
 );

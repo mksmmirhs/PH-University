@@ -21,7 +21,7 @@ const userNameSchema = new Schema<TUserName>(
       maxlength: [20, 'Name can not be more than 20 characters'],
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const facultySchema = new Schema<TFaculty, FacultyModel>(
@@ -94,18 +94,12 @@ const facultySchema = new Schema<TFaculty, FacultyModel>(
     toJSON: {
       virtuals: true,
     },
-  }
+  },
 );
 
 // generating full name
 facultySchema.virtual('fullName').get(function () {
-  return (
-    this?.name?.firstName +
-    '' +
-    this?.name?.middleName +
-    '' +
-    this?.name?.lastName
-  );
+  return this?.name?.firstName + '' + this?.name?.middleName + '' + this?.name?.lastName;
 });
 
 // filter out deleted documents

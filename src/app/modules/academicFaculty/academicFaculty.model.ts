@@ -13,7 +13,7 @@ const academicFacultySchema = new Schema<TAcademicFaculty>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 academicFacultySchema.pre('save', async function (next) {
@@ -30,7 +30,4 @@ academicFacultySchema.pre('findOneAndUpdate', async function (next) {
   next();
 });
 
-export const AcademicFaculty = model<TAcademicFaculty>(
-  'AcademicFaculty',
-  academicFacultySchema
-);
+export const AcademicFaculty = model<TAcademicFaculty>('AcademicFaculty', academicFacultySchema);
