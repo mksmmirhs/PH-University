@@ -14,17 +14,17 @@ const loginUser = catchAsync(async (req, res) => {
   });
 });
 
-// const changePassword = catchAsync(async (req, res) => {
-//   const { ...passwordData } = req.body;
+const changePassword = catchAsync(async (req, res) => {
+  const { ...passwordData } = req.body;
 
-//   const result = await AuthServices.changePassword(req.user, passwordData);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Password is updated successfully!',
-//     data: result,
-//   });
-// });
+  const result = await AuthServices.changePassword(req.user, passwordData);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Password is updated successfully!',
+    data: result,
+  });
+});
 
 // const refreshToken = catchAsync(async (req, res) => {
 //   const { refreshToken } = req.cookies;
@@ -40,6 +40,6 @@ const loginUser = catchAsync(async (req, res) => {
 
 export const AuthControllers = {
   loginUser,
-  //   changePassword,
+  changePassword,
   //   refreshToken,
 };

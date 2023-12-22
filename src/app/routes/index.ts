@@ -5,11 +5,11 @@ import { AcademicSemesterRoutes } from '../modules/academicSemester/academicSeme
 import { AcademicFacultyRoutes } from '../modules/academicFaculty/academicFaculty.route';
 import { AcademicDepartmentRoutes } from '../modules/academicDepartment/academicDepartment.route';
 import { AdminRoutes } from '../modules/Admin/admin.route';
-import { FacultyRoutes } from '../modules/Faculty/faculty.route';
+import { FacultyRoutes } from '../modules/Faculty/faculty.routes';
 import { CourseRoutes } from '../modules/Course/course.route';
 import { semesterRegistrationRoutes } from '../modules/SemesterRegistration/semesterRegistration.routes';
 import { offeredCourseRoutes } from '../modules/OfferedCourse/OfferedCourse.route';
-import { AuthRoutes } from '../modules/Auth/auth.route';
+import { AuthRoutes } from '../modules/Auth/auth.routes';
 
 const router = Router();
 
